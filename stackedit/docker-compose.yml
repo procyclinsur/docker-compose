@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  stackedit:
+    image: benweet/stackedit
+    container_name: stackedit
+    ports:
+      - 1234:8080/tcp
+    network_mode: bridge
+    volumes:
+      - ~/.stackedit/:/run
+restart: always
