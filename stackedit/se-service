@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+CMD=$1
+
+function command-help() {
+    echo -e "\nUSAGE: se-service <up|down>\n"
+    exit 0
+}
+
+function create-compose() {
+    cat > docker-compose.yml <<END
+version: '3.5'
+services:
+  stackedit:
+    image: benweet/stackedit
+    container_name: stackedit
+    ports:
+      - 1234:8080/tcp
+    network_mode: bridge
+    volumes:
+      - ~/.stackedit/:/run
+restart: always
+END
+}
+
+function main() {
+    case $CMD in
+        up)
+            create-compose
+            docker-compose up -d
+            ;;
+        down)
+            create-compose
+            docker-compose down
+            ;;
+        *)
+            command-help
+            ;;
+    esac
+    rm -f docker-compose.yml
+}
+
+main
